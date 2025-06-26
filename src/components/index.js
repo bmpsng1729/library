@@ -27,5 +27,5 @@ export
     Navbar,
     Logo,
     Home,
-    ContactCard
+    ContactCard,
 };

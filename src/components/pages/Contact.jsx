@@ -27,7 +27,7 @@ function Contact() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F2F2F2] text-[#000000] px-4 py-8 flex flex-col items-center">
+    <div className="min-h-screen bg-[#F2F2F2] text-[#000000] px-4 mt-7 flex flex-col items-center">
       {/* Header */}
       <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">Contact Us</h1>
       <p className="text-lg text-center max-w-xl mb-8">
@@ -59,7 +59,7 @@ function Contact() {
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
 
-        <div className="mt-4 text-center">
+        <div className=" text-center">
           <MapPin className="inline-block mr-2" />
           <span className="text-lg font-medium">
             Daltonganj, Palamu, Jharkhand - 822101, India
@@ -71,7 +71,7 @@ function Contact() {
       <div className="w-full md:hidden">
         <button
           onClick={() => setOpen(!open)}
-          className="w-full bg-black text-[#F2F2F2] py-3 px-4 rounded-md flex justify-between items-center"
+          className="w-full bg-black text-[#F2F2F2] py- px-4 rounded-md flex justify-between items-center"
         >
           Contact Options
           {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -79,7 +79,7 @@ function Contact() {
 
         {open && (
           <div className="mt-4 space-y-4">
-            <div className="bg-white p-4 rounded-md shadow-md">
+            <div className="bg-white  rounded-md shadow-md">
               <h3 className="font-semibold">Email</h3>
               <p className="text-gray-600">tpocell@nitjsr.ac.in</p>
             </div>
