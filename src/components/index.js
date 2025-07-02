@@ -1,6 +1,6 @@
 
 // import {Button,Contact,Facility,Input,Login,NewsPaper,Select,Signup} from "./pages";
-import Button from "./pages/Button";
+import IconLabelButtons from "./pages/IconLabelButtons";
 import Contact from "./pages/Contact";
 import Facility from "./pages/Facility";
 import Input from "./pages/Input";
@@ -13,10 +13,16 @@ import NewsPaper from "./pages/NewsPaper"
  import ContactCard from "./pages/ContactCard";
 
 import Navbar from "./pages/navbar/Navbar";
+import ProfileForm from "./dashboard/student/ProfileForm";
+import Button from "./pages/Button";
+import TimeTable from "./dashboard/student/TimeTable";
+import Admin from "./dashboard/admin/Admin";
+import SidebarCardAdmin from "./dashboard/admin/SidebarCardAdmin";
+import Payment from "./dashboard/student/Payment";
 
 export 
 {
-    Button,
+    IconLabelButtons,
     Contact,
     Facility,
     Input,
@@ -28,4 +34,10 @@ export
     Logo,
     Home,
     ContactCard,
+    ProfileForm,
+    Button,
+    TimeTable,
+    Admin,
+    SidebarCardAdmin,
+    Payment,
 };

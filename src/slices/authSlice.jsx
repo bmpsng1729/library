@@ -1,8 +1,13 @@
  import {createSlice} from "@reduxjs/toolkit"
  const initialState={
-    token:localStorage.getItem("token")?JSON.parse(localStorage.getItem("token")):null,
-    userData:localStorage.getItem("userData")?JSON.parse(localStorage.getItem("userData")):"empty",
-    //status:userData?true:false,
+        
+    // token:localStorage.getItem("token")?JSON.parse(localStorage.getItem("token")):null,
+    // userData:localStorage.getItem("userData")?JSON.parse(localStorage.getItem("userData")):"empty",
+    // //status:userData?true:false,
+    token:null,
+    userData:"",
+    isRegistered:JSON.parse(localStorage.getItem("isRegistered")),
+    isLoggedin:JSON.parse(localStorage.getItem("isLoggedin")),
   
  };
  const authSlice=createSlice({
@@ -17,21 +22,24 @@
       //  },
     
        login:(state,action)=>{
-         state.status=true;
+         state.isLoggedIn=true;
          state.userData=action.payload.user;
          //console.log("from authSlice,userdata",action.payload.user);
          state.token=action.payload.token;
        },
        logout:(state)=>{
-         state.status=false;
+        state.isLoggedIn=false;
          state.token=null;
          state.userData=null;
+       },
+       signup:(state)=>{
+         state.isRegistered=true;
        }
       
     },
  });
 
-export const{login,logout}=authSlice.actions;
+export const{login,logout,signup}=authSlice.actions;
 export default authSlice.reducer;
 
 // data in the userData

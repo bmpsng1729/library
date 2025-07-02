@@ -2,19 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { login as authLogin } from "../../slices/authSlice";
 import { Button, Input, Logo, Select } from '../index'
-import { useDispatch } from "react-redux";
 import icon from "../../assets/icon.jpg"
 // import authService from "../appwrite/auth"
 import { useForm } from "react-hook-form"
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
-import { useSelector } from "react-redux";
 
 function Login() {
-  const token = useSelector((state) => state.auth.token);
-
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch=useDispatch();
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState("")
 
@@ -22,54 +20,25 @@ function Login() {
   const login = async (data) => {
     setError("")
     try {
-      // const session = await authService.login(data)   /// make a backend call
+      const response = await axios.post("/api/v1/auth/login", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
-      // const response = await fetch("http://localhost:4000/api/v1/auth/login", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
- let response="hii";
-      const datas = await response.json();
+      console.log(response.data);
 
-
-
-      if (!response.ok) {
-        toast.error(datas.message || "something went wrong! try again");
-      }
-
-
-      else {
-       
-        dispatch(authLogin(datas));
-    // saving token  into the localstorage
-    console.log("token", JSON.stringify(datas.token));
-        localStorage.setItem("token", JSON.stringify(datas.token));
-         localStorage.setItem("userData", JSON.stringify(datas.user));
-         console.log("userData",data.user);
-        
-        // toast.success('🦄 logged in successfully');
-
-        if (datas.user.accountType === 'student') {
-          navigate('/student/dashboard')
-        }
-        if (datas.user.accountType === "admin") {
-          navigate('/admin/dashboard');
-        }
-
-
-      }
-
-
-
-      // if (session) {
-      //   // const userData = await authService.getCurrentUser()
-      //   if (userData) dispatch(authLogin(userData));
-      //   navigate("/")
-      // }
+   
+      // mark islogged in yes & set userdata in the store
+      dispatch(authLogin(response.data));
+         // set the data into the local storage
+    localStorage.setItem("isLoggedin", JSON.stringify(true))
+      // navigate to some other 
+        navigate("/student/profile")
+      toast.success(response.data.message || "sucessfully Signedup");
     } catch (error) {
+      console.log("err in login");
       setError(error.message)
     }
   }
