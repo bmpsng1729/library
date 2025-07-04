@@ -27,15 +27,18 @@ function Login() {
         withCredentials: true,
       });
 
-      console.log(response.data);
+      // console.log(response.data.success);
+      
+      if(response.data.success){
+            dispatch(authLogin(response.data));
+         // set the data into the local storage 
+      // navigate to some other 
+        navigate("/dashboard")
+      }
 
    
       // mark islogged in yes & set userdata in the store
-      dispatch(authLogin(response.data));
-         // set the data into the local storage
-    localStorage.setItem("isLoggedin", JSON.stringify(true))
-      // navigate to some other 
-        navigate("/student/profile")
+      
       toast.success(response.data.message || "sucessfully Signedup");
     } catch (error) {
       console.log("err in login");

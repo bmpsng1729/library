@@ -16,8 +16,9 @@ import { IconLabelButtons } from '../../index';
 function SidebarCard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const allTodo = useSelector((state) => state.todo.allTask) || [""];
-    console.log(typeof (allTodo));
-    console.log(allTodo);
+    const name = JSON.parse(localStorage.getItem("userData")).name;
+    // console.log(typeof (allTodo));
+    // console.log(allTodo);
     const dispatch = useDispatch();
 
     //take index value
@@ -55,7 +56,7 @@ function SidebarCard() {
                         }}
                     >
                         <MenuItem component={<Link to="fee-payment" />}>make Payment</MenuItem>
-                        <MenuItem component={<Link to="/calendar" />}>Fees</MenuItem>
+                        <MenuItem component={<Link to="your-detail" />}>See your Details</MenuItem>
                         <MenuItem component={<Link to="update-profile" />}>Update Profile</MenuItem>
                         <MenuItem component={<Link to="time-table" />}>Make Routine</MenuItem>
                     </Menu>
@@ -66,13 +67,15 @@ function SidebarCard() {
             <div className="flex flex-col flex-1 p-6 space-y-6">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0 w-full">
                     <h1 className="text-xl sm:text-2xl font-semibold text-gray-800 text-center sm:text-left">
-                        Welcome, Biempi Singh
+                        {
+                            `Welcome ${name}`
+                        }
                     </h1>
 
                     <img
-                        className="bg-red-300 rounded-full w-24 h-24 sm:w-28 sm:h-28 object-cover"
-                        src="/docs/images/examples/image-4@2x.jpg"
-                        alt="User profile"
+                        src={`https://ui-avatars.com/api/?name=${name}&background=random`}
+                        alt="Profile Avatar"
+                        className="w-12 h-12 rounded-full"
                     />
                 </div>
                 <div className="text-gray-600">

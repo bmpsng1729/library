@@ -19,6 +19,7 @@ import TimeTable from "./dashboard/student/TimeTable";
 import Admin from "./dashboard/admin/Admin";
 import SidebarCardAdmin from "./dashboard/admin/SidebarCardAdmin";
 import Payment from "./dashboard/student/Payment";
+import StudentDetails from "./dashboard/student/StudentDetails";
 
 export 
 {
@@ -40,4 +41,5 @@ export
     Admin,
     SidebarCardAdmin,
     Payment,
+    StudentDetails,
 };

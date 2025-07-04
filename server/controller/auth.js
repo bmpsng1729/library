@@ -88,7 +88,6 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         //take data from the req.body
-           console.log("i am here");
         const { email, password } = req.body;
         // validate
     
@@ -134,11 +133,24 @@ exports.login = async (req, res) => {
             }
             res.cookie("token",token,options);  // ke,value,some options
             // return a sucessfull return 
+            // console.log("existuser",existUser);
+            const user={
+                email:existUser.email,
+                gender:existUser.gender,
+                name:existUser.name,
+                seatReserved:existUser.seatReserved,
+                studyHr:existUser.studyHr,
+                preparingFor:existUser.preparingFor,
+                remAmount:existUser.remAmount,
+                paidAmount:existUser.paidAmount,
+                mobNumber:existUser.mobNumber,
+                fee:existUser.fee,
+            }
         
             return res.status(200).json({
                 message:"Congratulations! logged in sucessfully",
                 success:true,
-                user:existUser
+                user:user
             })
         }
         else {
@@ -156,6 +168,27 @@ exports.login = async (req, res) => {
             success: false,
             message: "there is an error in login,try again",
         })
+    }
+}
+
+exports.logout=async(req,res)=>{
+    try{
+         const options = {
+                httpOnly: true,      // prevent JavaScript access (XSS protection)
+                // secure: true,        // send only on HTTPS (set to false for local dev)
+               
+            }
+          res.clearCookie('token',options);
+          return res.status(200).json({
+            messsage:"logged out successfully",
+            success:true,
+          })
+    }
+    catch(err){
+      return res.status(400).json({
+        message:"problem in log out",
+        success:false,
+      })
     }
 }
 

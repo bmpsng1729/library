@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { Select } from "../../index"
+import { useForm } from "react-hook-form";
 function Payment() {
     // to load the modal of razorpay
+    const amount = JSON.parse(localStorage.getItem("userData")).fee;
+    const { register, handleSubmit } = useForm();
+    const currYear = new Date().getFullYear();
     function loadScript(src) {
         return new Promise((resolve) => {
             const script = document.createElement("script");
@@ -16,7 +21,8 @@ function Payment() {
         });
     }
 
-    async function displayRazorpay() {
+    async function displayRazorpay(paymentMonth) {
+        console.log("paymentMonth", paymentMonth);
         const res = await loadScript(
             "https://checkout.razorpay.com/v1/checkout.js"
         );
@@ -25,62 +31,69 @@ function Payment() {
             alert("Razorpay SDK failed to load. Are you online?");
             return;
         }
-                     // for order creation
+        // for order creation
+
         const result = await axios.post("/api/v1/auth/student/create-order");
 
         if (!result) {
             alert("Server error. Are you online?");
             return;
         }
+        console.log("order created", result);
 
-       const { amount, id: order_id, currency } = result.data;
+        const { amount, id: order_id, currency } = result.data;
 
 
         const options = {
-            key: "rzp_test_ns2v5BKbsspADO", // Enter the Key ID generated from the Dashboard
+            key: "rzp_test_b3MBa8l5gG1tAu", // Enter the Key ID generated from the Dashboard
             amount: amount.toString(),
             currency: currency,
-            name: "Soumya Corp.",
-            description: "Test Transaction",
+            name: "officers library",
+            description: " fee payment ",
             order_id: order_id,
-            handler: async function (response) {
+            handler: async function (response) {    // called after successfull payment
                 const data = {
-                    orderCreationId: order_id,
-                    razorpayPaymentId: response.razorpay_payment_id,
-                    razorpayOrderId: response.razorpay_order_id,
-                    razorpaySignature: response.razorpay_signature,
+                    order_id: response.razorpay_order_id,
+                    payment_id: response.razorpay_payment_id,
+                    signature: response.razorpay_signature,
+                    paymentMonth:paymentMonth.paidMonth,
                 };
-                                // for payment verification
+                // for payment verification
                 const result = await axios.post("/api/v1/auth/student/verify-payment", data);
 
-                alert(result.data.msg);
+                console.log(result);
+                console.log("result", result.config.data.payment_id);
                 //DB OPERATiON:::-- if result.data.msg based on this do the db operation
-            },
-            prefill: {
-                name: "Soumya Dey",
-                email: "SoumyaDey@example.com",
-                contact: "9999999999",
-            },
-            notes: {
-                address: "Soumya Dey Corporate Office",
-            },
-            theme: {
-                color: "#61dafb",
-            },
+            }
         };
-
+        /// after excution of handler funtion payment successfull razorpay window will open from below code
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
     }
 
     return (
         <div className="mt-10">
-            <header className="App-header">
-                <p>Buy React now!</p>
-                <button className="bg-red-400 p-2 border-2 text-white cursor-pointer" onClick={displayRazorpay}>
-                    Pay ₹500
+            <form className="App-header" onSubmit={handleSubmit(displayRazorpay)}>
+
+                <Select label="Enter Month for paying" options={[
+                    `january ${currYear}`,
+                    `february ${currYear}`,
+                    `march ${currYear}`,
+                    `april ${currYear}`,
+                    `may ${currYear}`,
+                    `june ${currYear}`,
+                    `july ${currYear}`,
+                    `august ${currYear}`,
+                    `september ${currYear}`,
+                    `october ${currYear}`,
+                    `november ${currYear}`,
+                    `december ${currYear}`
+                ]} {...register("paidMonth", { required: true })} />
+
+                <button className="bg-red-400 p-2 border-2 text-white cursor-pointer" type="submit">
+                    {`Pay ₹${amount}`}
                 </button>
-            </header>
+            </form>
         </div>
     );
 }

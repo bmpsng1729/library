@@ -5,7 +5,7 @@
     // userData:localStorage.getItem("userData")?JSON.parse(localStorage.getItem("userData")):"empty",
     // //status:userData?true:false,
     token:null,
-    userData:"",
+    userData:JSON.parse(localStorage.getItem("userData")),
     isRegistered:JSON.parse(localStorage.getItem("isRegistered")),
     isLoggedin:JSON.parse(localStorage.getItem("isLoggedin")),
   
@@ -22,15 +22,19 @@
       //  },
     
        login:(state,action)=>{
-         state.isLoggedIn=true;
+         state.isLoggedin=true;
          state.userData=action.payload.user;
          //console.log("from authSlice,userdata",action.payload.user);
          state.token=action.payload.token;
+           localStorage.setItem("isLoggedin", JSON.stringify(true))
+           localStorage.setItem("userData",JSON.stringify(state.userData));
        },
        logout:(state)=>{
-        state.isLoggedIn=false;
+        state.isLoggedin=false;
          state.token=null;
          state.userData=null;
+          localStorage.setItem("isLoggedin",JSON.stringify(false));
+          localStorage.setItem("userData",JSON.stringify(""));
        },
        signup:(state)=>{
          state.isRegistered=true;

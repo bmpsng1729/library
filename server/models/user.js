@@ -20,14 +20,22 @@ const userSchema=new mongoose.Schema(
         aadhar:{
             type:Number,
         },
+        fee:{
+            type:Number,
+            required:true,
+            default:600
+
+        },
         address:{
             type:String,
         },
        paidAmount:{
             type:Number,
+            default:0,
         },
         remAmount:{
-            type:Number
+            type:Number,
+            default:0,
         },
         gender:{
             type:String,
@@ -42,9 +50,8 @@ const userSchema=new mongoose.Schema(
     type: String,
     enum: [
       "UPSC",
-      "SSC CGL",
+      "SSC",
       "NDA",
-      "CDS",
       "Group D",
       "JEE/NEET",
       "Other",
@@ -55,6 +62,11 @@ const userSchema=new mongoose.Schema(
     type:String,
     enum:["admin","student"],
     default:"student",
+  },
+  studyHr:{
+ type:Number,
+ required:true,
+ default:6,
   },
   additionalDetails: {
 			type: mongoose.Schema.Types.ObjectId,

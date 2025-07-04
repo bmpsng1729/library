@@ -14,6 +14,12 @@ const successStorySchema=new mongoose.Schema({
         required:true,
 
     },
+    id: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+                ref: "user",
+            },
+
 });
 
 module.exports=mongoose.model("successStory",successStorySchema);

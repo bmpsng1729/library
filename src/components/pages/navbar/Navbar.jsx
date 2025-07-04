@@ -7,6 +7,8 @@ import {IconLabelButtons} from '../../index';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { logout } from "../../../slices/authSlice";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function Navbar() {
   const dispatch=useDispatch();
@@ -15,11 +17,30 @@ const isLoggedin=useSelector((state)=>state.auth.isLoggedin)
 const isRegistered=useSelector((state)=>state.auth.isRegistered);
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
- const logoutHandler = () => {
-  console.log("logout clicked");
-   localStorage.setItem("isLoggedin",JSON.stringify(false));
+ const logoutHandler = async() => {
+ try{
+  const response = await axios.get("/api/v1/auth/logout", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      // console.log(response.data.success);
+   if(response.data.success){
+
+   
    dispatch(logout());
-   navigate("/login");
+   toast.success(response.data.message || "logout Successfull");
+   navigate("/login")
+   }
+   
+   
+
+   //navigate("/login");
+ }
+ catch(err){
+  console.log("err in logout",err);
+ }
 };
  
   // Common style classes
@@ -68,7 +89,7 @@ const isRegistered=useSelector((state)=>state.auth.isRegistered);
           }
           <NavLink to="/contact" onClick={toggle} className={({ isActive }) => `${linkBase} ${isActive ? active : ''}`}>Contact</NavLink>
          {
-          !isLoggedin ? (<NavLink to="/login" className={({ isActive }) => `${linkBase} ${isActive ? active : ''}`}>Login</NavLink>) : (<button onClick={logoutHandler} className='text-white border-b-blue-500 rounded-2xl font-bold'>logout</button>)
+          !isLoggedin ? (<NavLink to="/login" className={({ isActive }) => `${linkBase} ${isActive ? active : ''}`}>Login</NavLink>) : (<button onClick={logoutHandler} className='text-white border-b-blue-500 rounded-2xl font-bold cursor-pointer'>logout</button>)
           }
         </div>
       )}

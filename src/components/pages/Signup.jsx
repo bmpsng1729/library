@@ -34,6 +34,7 @@ function Signup() {
         localStorage.setItem("isRegistered",JSON.stringify(true));
      if(userData.data.success){
       toast.success(userData.data.message || "signup sucessfull");
+      navigate("/login");
      }
      else {
       toast.error(userData.data.message || "error in signup")

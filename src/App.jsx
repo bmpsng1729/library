@@ -1,6 +1,9 @@
+
+// TODO::: when application load make sure to complete the rem amount.....
+
 import { useState } from 'react'
 import './App.css'
-import { Navbar,Contact, NewsPaper,Login, Signup,Home, Facility,ProfileForm,TimeTable,Admin,Payment} from "./components/index"
+import { Navbar,Contact, NewsPaper,Login, Signup,Home, Facility,ProfileForm,TimeTable,Admin,Payment,StudentDetails} from "./components/index"
 import { Routes,Route } from 'react-router'
 import SidebarCard from './components/dashboard/student/SidebarCard'
 import UploadPdf from './components/dashboard/admin/UploadPdf'
@@ -27,6 +30,7 @@ function App() {
         <Route path="admin" element={<Admin/>}/>
         <Route path='admin/upload-pdf' element={<UploadPdf/>}/>
         <Route path='/dashboard/fee-payment' element={<Payment/>} ></Route>
+        <Route path='dashboard/your-detail' element={<StudentDetails/>}></Route>
 
        
         

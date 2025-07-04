@@ -1,6 +1,8 @@
 const { current } = require("@reduxjs/toolkit");
 const { razorpayInstance } = require("../config/razorpay");
 const { order } = require("@mui/system");
+const payment = require("../models/payment")
+const user = require("../models/user");
 const crypto = require("crypto");
 const { Currency } = require("lucide-react");
 require("dotenv").config();
@@ -11,11 +13,16 @@ const instance = razorpayInstance();
 exports.createOrder = async (req, res) => {
     try {
         // const { amount } = req.body;
-         const amount=500;
+        // fetch email from req.user.body and from there fetch fee
+        const { email } = req.user.email;
+
+        //find user detail to find fee of the user
+        const userDatails = await user.findOne({ email });
+        const amount = userDatails.amount;
 
         const options = {
             amount: amount * 100,
-            currency: "INR", // ✅ fixed spelling
+            currency: "INR", //  fixed spelling
             receipt: `receipt_order_${Date.now()}`,
         };
 
@@ -27,7 +34,7 @@ exports.createOrder = async (req, res) => {
                 });
             }
 
-            return res.status(200).json(order); // ✅ return order object
+            return res.status(200).json(order); //  return order object
         });
     } catch (err) {
         console.error("Error in order creation:", err);
@@ -42,7 +49,9 @@ exports.createOrder = async (req, res) => {
 // order_id+hmacObject+payment_id=signature 
 exports.paymentVerification = async (req, res) => {
     try {
-        const { order_id, payment_id, signature } = req.body;
+        const { order_id, payment_id, signature, paymentMonth } = req.body;
+        const { email } = req.user.email;
+
         const secret = process.env.RAZORPAY_KEY_SECRET;
 
         // create a hmacObjec
@@ -52,13 +61,27 @@ exports.paymentVerification = async (req, res) => {
 
         if (generatedSignature === signature) {
             // TODO:::::::: DB operations
-            // sucessfull payment
-            // return res.status(200).json({
-            //     message: "Payment Sucessfull",
-            //     success: true,
+            const userDatails = await user.findOne({ email });
+            const fee = userDatails.fee;
+            const id = userDatails._id;
 
-            // });
-            return res.status(200).json(order)
+
+            const paymentDoneDetails = await payment.create({
+                id: id,
+                paidAt: Date.now(),
+                paymentId: payment_id,
+                paymentMonth: paymentMonth,
+                amount: fee,
+
+
+            });
+            console.log("paymentDoneDetails",paymentDoneDetails);
+            // sucessfull payment
+            return res.status(200).json({
+                message: "Payment Sucessfull",
+                success: true,
+
+            });
         }
         else {
             return res.status(400).json({
