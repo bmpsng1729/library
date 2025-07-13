@@ -7,7 +7,7 @@ import InputCard from '../InputCard';
 import { useSelector } from 'react-redux';
 import TodoCard from './TodoCard';
 import { useDispatch } from 'react-redux';
-import { FaRegSadTear } from "react-icons/fa";
+import { MdDone } from "react-icons/md";
 import { BsEmojiSmileUpsideDown } from "react-icons/bs";  // for done
 import { MdDeleteForever } from "react-icons/md";
 import { deleteAllTodo } from '../../../slices/todoSlice';
@@ -99,7 +99,7 @@ function SidebarCard() {
                                 >
                                     <td className="py-3 px-4">{todo}</td>
                                     <td className="py-3 px-2 text-center text-blue-500 cursor-pointer hover:text-blue-700">
-                                        <FaRegSadTear />
+                                      <MdDone/>
                                     </td>
                                     <td className="py-3 px-2 text-center text-red-500 cursor-pointer hover:text-red-700">
                                         <MdDeleteForever />
