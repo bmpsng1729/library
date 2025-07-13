@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      '/api': 'http://localhost:4000', // All requests to /api/* will be forwarded
+      '/api': 'https://library-r15c.onrender.com/', // All requests to /api/* will be forwarded
        
     }, 
   },
