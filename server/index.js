@@ -22,7 +22,7 @@ db.connect();
 
 // middleware
 const corsOptions = {
-    origin:"https://library-r15c.onrender.com/",
+    origin:"https://library-2stw.onrender.com/",
     credentials:true,
     optionsSuccessStatus:200,
    methods:"GET,HEAD,PUT,PATCH,POST,DELETE",
