@@ -1,6 +1,7 @@
  const payment = require("../models/payment");
 const user=require("../models/user")
 const successStory=require("../models/successStory");
+const profile = require("../models/profile");
 // fee details
 //write sucess story
 //update profile----do later
@@ -93,4 +94,48 @@ exports.successStory=async(req,res)=>{
             message:"find issues in sucessStory handler",
         })
     }
+}
+
+exports.updateProfile=async( req,res)=>{
+  try{
+       // fetch the email
+       const email=req.user.email;
+      //  console.log("req.body:",req.body);
+    
+   //  const email="b@gmail.com"
+       const {gender,instagramId,address,city,aadhar}=req.body;
+       // fetch the user profile detail
+       const userDatails=await user.findOne({email});
+
+       const  id=userDatails.additionalDetails;
+  
+            // update the provided thing
+       const profieDetails=await profile.findOneAndUpdate(
+        {_id:id},
+        {
+          gender:gender,
+          instagramId:instagramId,
+          address:address,
+          city:city,
+          aadhar:aadhar,
+        },
+        {
+          new:true,
+        }
+      );
+      console.log("updated profile details",profieDetails);
+
+       // return a success response
+       return res.status(200).json({
+        message:"profile updated successfully",
+        success:true,
+       })
+  }
+  catch(err){
+    console.log("error in profile updating",err);
+    return res.status(400).json({
+      success:false,
+      message:"there is an error in student profile update",
+    })
+  }
 }

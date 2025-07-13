@@ -11,6 +11,7 @@ const cors=require("cors");
  const userRoutes=require("./routes/user");
  const paymentRoutes=require("./routes/payment");
  const adminRoutes=require("./routes/admin");
+ const studentRoutes=require("./routes/student");
 // connect to cloudinary
 // connect cors
 // cookie-parser
@@ -46,5 +47,6 @@ app.listen(port,()=>{
 
 // write all routes
 app.use("/api/v1/auth",userRoutes);
-app.use("/api/v1/auth/student",paymentRoutes);
+app.use("/api/v1/auth/payment",paymentRoutes);
+app.use("/api/v1/auth/student",studentRoutes)
 app.use("/api/v1/auth/admin/",adminRoutes);

@@ -39,7 +39,7 @@ const profileSchema= new mongoose.Schema({
         required  : true,
     },
     pincode:{
-        type:Number,
+        type:String,
         required  : true,
     },
     
@@ -49,6 +49,10 @@ const profileSchema= new mongoose.Schema({
         default:"B.Tech",
 
      },
+     aadhar:{
+        type:String,
+        
+     }
     
     
 });

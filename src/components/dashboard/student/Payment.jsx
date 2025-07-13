@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Select } from "../../index"
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 function Payment() {
     // to load the modal of razorpay
     const amount = JSON.parse(localStorage.getItem("userData")).fee;
@@ -33,7 +34,7 @@ function Payment() {
         }
         // for order creation
 
-        const result = await axios.post("/api/v1/auth/student/create-order");
+        const result = await axios.post("/api/v1/auth/payment/create-order");
 
         if (!result) {
             alert("Server error. Are you online?");
@@ -49,21 +50,29 @@ function Payment() {
             amount: amount.toString(),
             currency: currency,
             name: "officers library",
-            description: " fee payment ",
+            description: `You are paying for ${paymentMonth}`,
             order_id: order_id,
             handler: async function (response) {    // called after successfull payment
-                const data = {
-                    order_id: response.razorpay_order_id,
-                    payment_id: response.razorpay_payment_id,
-                    signature: response.razorpay_signature,
-                    paymentMonth:paymentMonth.paidMonth,
-                };
-                // for payment verification
-                const result = await axios.post("/api/v1/auth/student/verify-payment", data);
+                try {
+                    const data = {
+                        order_id: response.razorpay_order_id,
+                        payment_id: response.razorpay_payment_id,
+                        signature: response.razorpay_signature,
+                        paymentMonth: paymentMonth.paidMonth,
+                    };
+                    // for payment verification
+                    const result = await axios.post("/api/v1/auth/payment/verify-payment", data);
+                    console.log("result",result);
+                  if(result.data.success){
+                    toast.success( result.data.message||"payment successfull");
+                  }
+                    //DB OPERATiON:::-- if result.data.msg based on this do the db operation
+                }
+                catch (err) {
+                   console.log("error in payment verification",err);
+                   toast.error("error in payment verfication");
+                }
 
-                console.log(result);
-                console.log("result", result.config.data.payment_id);
-                //DB OPERATiON:::-- if result.data.msg based on this do the db operation
             }
         };
         /// after excution of handler funtion payment successfull razorpay window will open from below code

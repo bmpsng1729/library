@@ -1,16 +1,28 @@
 import React from 'react';
 import { Input, Select } from '../../index';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function ProfileForm() {
     const { register, handleSubmit } = useForm();
     const dbCall = async (data) => {
         try {
             // make a db call async
+            const response = await axios.patch("/api/v1/auth/student/update-profile", data, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
             //show a toast if hit is successfull
             console.log("update-profile data", data);
+            console.log("response of updated profile", response.data.success);
+            if(response.data.success){
+                toast.success(response.data.message || "profile updated");
+            }
         } catch (err) {
-            console.log("error in profile updation")
+            console.log("error in profile updation",err)
         }
     }
 
@@ -42,7 +54,7 @@ function ProfileForm() {
                     <Input
                         label="Aadhar Number"
                         placeholder="Enter Aadhar Number"
-                        {...register("aadhar" ,{required:true})}
+                        {...register("aadhar", { required: true })}
                     />
 
                     <button

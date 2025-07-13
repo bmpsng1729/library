@@ -20,6 +20,11 @@ import Admin from "./dashboard/admin/Admin";
 import SidebarCardAdmin from "./dashboard/admin/SidebarCardAdmin";
 import Payment from "./dashboard/student/Payment";
 import StudentDetails from "./dashboard/student/StudentDetails";
+import ProtectedRoute from "./ProtectedRoute";
+import OtpVerification from "./pages/OtpVerification";
+import RegisterStudent from "./dashboard/admin/RegisterStudent";
+import AdminOnly from "./pages/AdminOnly";
+import StudentOnly from "./pages/StudentOnly";
 
 export 
 {
@@ -42,4 +47,10 @@ export
     SidebarCardAdmin,
     Payment,
     StudentDetails,
+    ProtectedRoute,
+    OtpVerification,
+    RegisterStudent,
+    AdminOnly,
+    StudentOnly,
+    
 };

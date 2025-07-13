@@ -3,7 +3,6 @@ const jwt=require("jsonwebtoken");
 exports.auth=async(req,res,next)=>{
   try{
       // extract jwt token from (cookie/body/header)
-      console.log(req.cookies);
       //   TODO:::::::::::::::::put token into header:::::::
       const token=req.cookies.token || req.header("Authorization").replace("Bearer","");
       // verify the token
@@ -13,16 +12,13 @@ exports.auth=async(req,res,next)=>{
             success:false,
         });
       }
-      const decodedToken=await jwt.verify(token,process.env.JWT_SECRET);
-      console.log("decodedToken in auth",decodedToken);
+      const decodedToken= jwt.verify(token,process.env.JWT_SECRET);
       // put the decode user and data so that we can use further
       req.user=decodedToken;
+       console.log("i am authorized");
       
       // verification done: call next function
       next();
-
-
-
   } 
   catch(err){
     return res.status(400).json({
@@ -68,7 +64,7 @@ exports.isStudent=async(req,res,next)=>{
 
 }
 
-exports.isAdmint=async(req,res,next)=>{
+exports.isAdmin=async(req,res,next)=>{
     try{
          // find email from user(bcz you have put this while doing isAuth)
          console.log("for verification of role and email",req.user);

@@ -21,7 +21,7 @@ function SidebarCardAdmin() {
                     }}
                 >
                     <MenuItem component={<Link to="upload-pdf" />}>Upload News</MenuItem>
-                    <MenuItem component={<Link to="/calendar" />}>Register</MenuItem>
+                    <MenuItem component={<Link to="register" />}>Register</MenuItem>
                     <MenuItem component={<Link to="/e-commerce" />}>See Student</MenuItem>
                 </Menu>
             </Sidebar>

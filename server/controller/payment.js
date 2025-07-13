@@ -6,6 +6,9 @@ const user = require("../models/user");
 const crypto = require("crypto");
 const { Currency } = require("lucide-react");
 require("dotenv").config();
+const{mailSender}=require("../utils/mailSender");
+const {paymentSuccessEmail}=require("../mail/paymentSucessfullEmail");
+const { successfulPaymentMessageToAdmin } = require("../mail/successfulPaymentMessageToAdmin ");
 
 const instance = razorpayInstance();
 // 1st step-initialize payment
@@ -14,13 +17,11 @@ exports.createOrder = async (req, res) => {
     try {
         // const { amount } = req.body;
         // fetch email from req.user.body and from there fetch fee
-        const { email } = req.user.email;
-
         //find user detail to find fee of the user
+        const email=req.user.email;
         const userDatails = await user.findOne({ email });
-        const amount = userDatails.amount;
-
-        const options = {
+        const amount = userDatails.fee;
+      const options = {
             amount: amount * 100,
             currency: "INR", //  fixed spelling
             receipt: `receipt_order_${Date.now()}`,
@@ -33,7 +34,7 @@ exports.createOrder = async (req, res) => {
                     message: "Something went wrong in order creation",
                 });
             }
-
+             console.log("order created successfull:",order);
             return res.status(200).json(order); //  return order object
         });
     } catch (err) {
@@ -49,8 +50,12 @@ exports.createOrder = async (req, res) => {
 // order_id+hmacObject+payment_id=signature 
 exports.paymentVerification = async (req, res) => {
     try {
+        console.log("came in the payment verification");
         const { order_id, payment_id, signature, paymentMonth } = req.body;
-        const { email } = req.user.email;
+        console.log("orderid,paymentid,signature,paymentmonth",order_id,payment_id,signature,paymentMonth);
+        const  email  = req.user.email;
+        console.log("email",email);
+        
 
         const secret = process.env.RAZORPAY_KEY_SECRET;
 
@@ -64,6 +69,7 @@ exports.paymentVerification = async (req, res) => {
             const userDatails = await user.findOne({ email });
             const fee = userDatails.fee;
             const id = userDatails._id;
+            console.log("user details in payment verifation:",userDatails);
 
 
             const paymentDoneDetails = await payment.create({
@@ -75,11 +81,23 @@ exports.paymentVerification = async (req, res) => {
 
 
             });
-            console.log("paymentDoneDetails",paymentDoneDetails);
+            // update the remAmount and paidAmount
+              const remAmount=userDatails.remAmount-fee;
+              const paidAmount=userDatails.paidAmount+fee
+              
+              userDatails.remAmount=remAmount;
+              userDatails.paidAmount=paidAmount;
+              await userDatails.save();
+            //sent sucess mail to the user
+                 mailSender(email,"payment successfyll",paymentSuccessEmail(userDatails.name,userDatails.fee,order_id,payment_id,paymentMonth))
+             // email to the user
+            mailSender("bmpsng@gmail.com",`${userDatails.name}`,successfulPaymentMessageToAdmin(userDatails.name,userDatails.fee,order_id,payment_id,userDatails.joiningDate))
+
             // sucessfull payment
             return res.status(200).json({
                 message: "Payment Sucessfull",
                 success: true,
+                paymentDoneDetails,
 
             });
         }

@@ -1,7 +1,9 @@
 const user = require("../models/user");
+const profile=require("../models/profile")
 const payment = require("../models/payment");
 const { mailSender } = require("../utils/mailSender");
 const { succefullRegistrationEmail } = require("../mail/registrationSuccessFullEmail")
+const bcrypt=require("bcrypt");
 
 // student list  
 exports.studentCount = async (req, res) => {
@@ -26,11 +28,12 @@ exports.studentCount = async (req, res) => {
 exports.registerStudent = async (req, res) => {
     try {
         // find data from the req body
-        const { name, email, mobNumber, aadhar, paidAmount = 0, studyHr } = req.body;
-        const password = name;
+        const { name, email, mobNumber, studyHr,gender,fee} = req.body;
+        console.log("req.body:",req.body);
+  
         const adminEmail = req.user.email;
         const date = Date.now();
-        if (!name || !email || !mobNumber || !aadhar || !studyHr) {
+        if (!name || !email || !mobNumber || !studyHr) {
             return res.status(400).json({
                 message: "it seems like you have not provided the required details!!",
                 success: false,
@@ -44,21 +47,45 @@ exports.registerStudent = async (req, res) => {
                 message: "user have already registered"
             })
         }
+
+        let profieDetails = await profile.create(
+                    {
+                        dob: null,
+                        about: "",
+                        contactNumber: 9876543210,
+                        LinkdeinId: "https://www.linkedin.com/in/testuser",
+                        instagramId: "https://www.instagram.com/testuser",
+                        facebookId: "https://www.,facebook.com/testuser",
+                        address: "Room No. 102, Hostel-2, NIT Jamshedpur",
+                        city: "Jamshedpur",
+                        state: "Jharkhand",
+                        pincode: 831014,
+                        degree: "", // 
+                    }
+                );
+                console.log("user profile created",profieDetails);
+        const hashedPassword = await bcrypt.hash(email, 10);
         //register the student
+        // hash the name as a password
         const registrationDetails = await user.create({
             email: email,
-            password: password,
+            name:name,
+            password: hashedPassword,
             mobNumber: mobNumber,
-            paidAmount: paidAmount,
-            studyHr: studyHr
+            studyHr: Number(studyHr),
+            gender:gender,
+            fee:Number(fee),
+            additionalDetails:profieDetails._id,
         });
+        console.log("registration details,",registrationDetails);
 
         // sent a sucessfull message to the user
         const userMailRes = mailSender(email, "Student Registration Successfull", succefullRegistrationEmail(date, name));
         // sent a successfull email to the admin
-        const adminMailRes = mailSender(email, "Student Registration Successfull", succefullRegistrationEmail(date, name));
+        const adminMailRes = mailSender(adminEmail, "Student Registration Successfull", succefullRegistrationEmail(date, name));
         // return successfull response
-        return res.status.json({
+        console.log("user mail res:",userMailRes);
+        return res.status(200).json({
             success: true,
             message: "user registration successfull",
             // TODO:::: remove in final code
