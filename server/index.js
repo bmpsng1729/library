@@ -2,7 +2,7 @@ const express=require("express");
 const app=express();
 const db=require("./config/database");
 require("dotenv").config();
-const port=process.env.PORT ||4000;
+const port=process.env.PORT ;
 const cookieParser=require("cookie-parser");
 const cors=require("cors");
  const{connectToCloudinary}=require("./config/connectToCloudinary")
