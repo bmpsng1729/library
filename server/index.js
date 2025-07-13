@@ -41,7 +41,7 @@ app.get("/",(req,res)=>{
         message:"server is running on port 4000"
     })
 });
-app.listen(port,()=>{
+app.listen(port,'0.0.0.0',()=>{
     console.log(`server is running on port ${port}`);
 });
 
