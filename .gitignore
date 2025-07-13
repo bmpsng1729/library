@@ -22,7 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-estlint.config.js
-vite.config.js
-package.json
-package-lock.json
+
+
