@@ -1,4 +1,4 @@
-const { default: TableBody } = require('@mui/material/TableBody');
+
 const nodemailer=require('nodemailer');
 
 exports.mailSender=async(email,title,body)=>{
