@@ -36,7 +36,7 @@ function Login() {
 
     try {
      const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await axios.post(`${baseUrl}/login`, data, {
+      const response = await axios.post(`${baseUrl}/auth/login`, data, {
         headers: {
           "Content-Type": "application/json",
         },

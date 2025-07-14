@@ -38,7 +38,7 @@ connectToCloudinary();
 // default route
 app.get("/",(req,res)=>{
     return res.json({
-        message:"server is running on port 4000"
+        message:`server is running on port${port}`,
     })
 });
 app.listen(port,'0.0.0.0',()=>{
