@@ -21,7 +21,8 @@ function Signup() {
   const create = async (data) => {
     setError("")
     try {
-      const userData = await axios.post("/api/v1/auth/signup", data, {
+       const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const userData = await axios.post(`${baseUrl}/auth/signup`, data, {
         headers: {
           "Content-Type": "application/json",
         },

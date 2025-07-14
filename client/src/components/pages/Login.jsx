@@ -35,7 +35,8 @@ function Login() {
     setLoading(true)
 
     try {
-      const response = await axios.post("/api/v1/auth/login", data, {
+     const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await axios.post(`${baseUrl}/login`, data, {
         headers: {
           "Content-Type": "application/json",
         },
