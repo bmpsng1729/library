@@ -2,7 +2,7 @@ const express=require("express");
 const app=express();
 const db=require("./config/database");
 require("dotenv").config();
-const port=process.env.PORT ;
+const port=process.env.PORT || 10000;
 const cookieParser=require("cookie-parser");
 const cors=require("cors");
  const{connectToCloudinary}=require("./config/connectToCloudinary")
@@ -22,7 +22,7 @@ db.connect();
 
 // middleware
 const corsOptions = {
-    origin:"https://library-2stw.onrender.com/",
+    origin:"https://library-neon-delta.vercel.app/",
     credentials:true,
     optionsSuccessStatus:200,
    methods:"GET,HEAD,PUT,PATCH,POST,DELETE",
